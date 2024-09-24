@@ -6,6 +6,7 @@ import (
 )
 
 type QueryRequest struct {
+	Keyword  string            `json:"keyword"`
 	PageSize int               `json:"pageSize"`
 	Page     int               `json:"page"`
 	Sort     []SortCriteria    `json:"sort"`   // Multiple sorting criteria
@@ -20,6 +21,7 @@ type SortCriteria struct {
 func (qr QueryRequest) String() string {
 	var sb strings.Builder
 
+	sb.WriteString(fmt.Sprintf("Keyword: %d\n", qr.Keyword))
 	sb.WriteString(fmt.Sprintf("PageSize: %d\n", qr.PageSize))
 	sb.WriteString(fmt.Sprintf("Page: %d\n", qr.Page))
 

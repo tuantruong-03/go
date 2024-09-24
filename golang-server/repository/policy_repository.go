@@ -6,6 +6,7 @@ import (
 	"gPRC/models"
 	"gPRC/models/mongodb"
 	"log"
+	"reflect"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -33,8 +34,30 @@ func (repo *policyRepository) GetPolicies(queryRequest *dto.QueryRequest) []mode
 		return policies
 	}
 	log.Print(queryRequest.String())
-	// Handle filter
+	// Handle search, filter
 	filter := bson.D{}
+
+	// Handle search term
+	if queryRequest.Keyword != "" {
+		searchFilter := bson.D{{"$or", bson.A{}}}
+		policyType := reflect.TypeOf(models.Policy{})
+
+		for i := 0; i < policyType.NumField(); i++ {
+			field := policyType.Field(i)
+			fieldName := field.Tag.Get("bson")
+			if fieldName == "" {
+				continue // If there's no BSON tag, continue
+			}
+
+			fieldFilter := bson.D{{fieldName, bson.D{
+				{"$regex", queryRequest.Keyword}, // Search with regex
+				{"$options", "i"},                // Case-insensitive search
+			}}}
+			searchFilter[0].Value = append(searchFilter[0].Value.(bson.A), fieldFilter)
+		}
+		filter = append(filter, searchFilter...)
+	}
+
 	if len(queryRequest.Filter) > 0 {
 		var filterKey, filterValue string
 		for key, value := range queryRequest.Filter {
