@@ -34,9 +34,14 @@ func (h *handler) GetPolicies(ctx *gin.Context) {
 		}
 	}
 	policies := h.policyService.GetPolicies(queryRequest)
+	response := dto.QueryResponse{
+		Total: len(policies),
+		Data:  policies,
+	}
+
 	// if err != nil {
 	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
 	// }
-	ctx.JSON(http.StatusOK, policies)
+	ctx.JSON(http.StatusOK, response)
 }
