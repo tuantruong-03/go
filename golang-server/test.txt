@@ -1,0 +1,9 @@
+option java_multiple_files = true;
+option java_package = "com.opswat.mem.console.policy.aep.action.threatintelligent";
+
+
+import "console/policy/aep/action/threatintelligent/threat_exclusion_dto.proto";
+import "console/policy/aep/action/threatintelligent/scan_options_dto.proto";
+import "console/policy/aep/action/threatintelligent/file_secure_download_dto.proto";
+import "console/policy/aep/action/threatintelligent/file_type_exception_dto.proto";
+import "console/policy/aep/action/threatintelligent/limit_file_upload_dto.proto";

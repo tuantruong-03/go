@@ -38,7 +38,7 @@ func channel(ch chan int, wg *sync.WaitGroup, index int) {
 		Global = <-ch
 		Global++
 		ch <- Global
-		fmt.Println(index)
+		// fmt.Println(index)
 	}
 }
 
@@ -49,6 +49,7 @@ func channelSolution(n int) {
 	for i := 0; i < n; i++ {
 		go channel(ch, &wg, i)
 	}
+	fmt.Println("Main goroutine")
 	ch <- Global
 
 	wg.Wait()
